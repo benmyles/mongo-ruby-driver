@@ -53,12 +53,28 @@ module Mongo
   end
 end
 
+module Mongo
+  def self.em?
+    ENV["MONGO_EM"].to_i == 1
+  end
+end
+
 require 'bson'
 
 require 'mongo/util/conversions'
 require 'mongo/util/support'
 require 'mongo/util/core_ext'
-require 'mongo/util/pool'
+
+if Mongo.em?
+  require 'em-synchrony'
+  require 'em-synchrony/tcpsocket'
+  require 'em-synchrony/thread'
+  require 'mongo/util/em_pool'
+  warn "* Running in EventMachine + EM-Synchrony Mode"
+else
+  require 'mongo/util/pool'
+end
+
 require 'mongo/util/server_version'
 require 'mongo/util/uri_parser'
 

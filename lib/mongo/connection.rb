@@ -24,9 +24,15 @@ module Mongo
 
   # Instantiates and manages connections to MongoDB.
   class Connection
-    TCPSocket = ::TCPSocket
-    Mutex = ::Mutex
-    ConditionVariable = ::ConditionVariable
+    if Mongo.em?
+      TCPSocket         = ::EventMachine::Synchrony::TCPSocket
+      Mutex             = ::EventMachine::Synchrony::Thread::Mutex
+      ConditionVariable = ::EventMachine::Synchrony::Thread::ConditionVariable
+    else
+      TCPSocket         = ::TCPSocket
+      Mutex             = ::Mutex
+      ConditionVariable = ::ConditionVariable
+    end
 
     # Abort connections if a ConnectionError is raised.
     Thread.abort_on_exception = true
@@ -345,7 +351,7 @@ module Mongo
       self["admin"].command(oh)
     end
 
-    # Checks if a server is alive. This command will return immediately 
+    # Checks if a server is alive. This command will return immediately
     # even if the server is in a lock.
     #
     # @return [Hash]
