@@ -1,9 +1,9 @@
-require "./lib/mongo"
+#require "./lib/mongo"
 
 Gem::Specification.new do |s|
   s.name = 'mongo'
 
-  s.version = Mongo::VERSION
+  s.version = "1.3.1"
 
   s.platform = Gem::Platform::RUBY
   s.summary = 'Ruby driver for the MongoDB'
@@ -30,5 +30,5 @@ Gem::Specification.new do |s|
   s.email = 'mongodb-dev@googlegroups.com'
   s.homepage = 'http://www.mongodb.org'
 
-  s.add_dependency(%q<bson>, [">= #{Mongo::VERSION}"])
+  s.add_dependency(%q<bson>, [">= 1.3.1"])
 end
