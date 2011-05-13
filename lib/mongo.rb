@@ -54,8 +54,10 @@ module Mongo
 end
 
 module Mongo
-  def self.em?
-    ENV["MONGO_EM"].to_i == 1
+  unless Mongo.respond_to?(:em?)
+    def self.em?
+      false
+    end
   end
 end
 
@@ -66,9 +68,6 @@ require 'mongo/util/support'
 require 'mongo/util/core_ext'
 
 if Mongo.em?
-  require 'em-synchrony'
-  require 'em-synchrony/tcpsocket'
-  require 'em-synchrony/thread'
   require 'mongo/util/em_pool'
   warn "* Running in EventMachine + EM-Synchrony Mode"
 else
